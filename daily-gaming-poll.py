@@ -7,6 +7,7 @@ from typing import List
 from zoneinfo import ZoneInfo
 from datetime import time
 from telegram import Update
+from telegram.error import Conflict
 from telegram.ext import ApplicationHandlerStop
 from telegram.error import Forbidden
 from telegram.error import ChatMigrated
@@ -46,10 +47,9 @@ log = logging.getLogger(__name__)
 # Error Handler
 ###############################################################################
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
-    log.error("Exception while handling update:", exc_info=context.error)
-    if isinstance(context.error, ApplicationHandlerStop):
+    if isinstance(context.error, (ApplicationHandlerStop, Conflict)):
         return
-
+    log.error("Exception while handling update:", exc_info=context.error)
 
 ###############################################################################
 # Working with groups.json file
