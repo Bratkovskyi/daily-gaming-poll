@@ -164,7 +164,7 @@ async def main() -> None:
     await app.bot.delete_webhook(drop_pending_updates=True)
 
     # Schedule the daily poll job
-    poll_time = time(hour=19, minute=00, tzinfo=TIMEZONE)
+    poll_time = time(hour=19, minute=10, tzinfo=TIMEZONE)
     app.job_queue.run_daily(daily_poll_job, poll_time)
 
     log.info("Bot started. Waiting to be added to groups…")
