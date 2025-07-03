@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 from typing import List
 from zoneinfo import ZoneInfo
@@ -22,8 +21,9 @@ from telegram.ext import (
 ###############################################################################
 
 # Load .env only locally
-if os.environ.get("RAILWAY_STATIC_URL") is None:
-    load_dotenv()
+# from dotenv import load_dotenv
+# if os.environ.get("RAILWAY_STATIC_URL") is None:
+#     load_dotenv()
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 GROUPS_FILE = Path("groups.json")
