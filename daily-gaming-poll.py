@@ -161,7 +161,7 @@ async def main() -> None:
     app.add_error_handler(error_handler)
 
     # Schedule poll job (daily)
-    poll_time = time(hour=19, minute=50, tzinfo=TIMEZONE)
+    poll_time = time(hour=18, minute=52, tzinfo=TIMEZONE)
     app.job_queue.run_daily(daily_poll_job, poll_time)
 
     log.info("Bot started. Waiting to be added to groups…")
