@@ -1,5 +1,5 @@
-# Telegram bot framework with built-in AIORateLimiter support
-python-telegram-bot[rate-limiter]~=21.11
+# Telegram bot framework with built-in AIORateLimiter and JobQueue support
+python-telegram-bot[rate-limiter,job-queue]~=21.11
 
 # Load environment variables from a .env file
 python-dotenv~=1.0
