@@ -20,8 +20,12 @@ from telegram.ext import (
 ###############################################################################
 # Configuration
 ###############################################################################
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+
+# Load .env only locally
+if os.environ.get("RAILWAY_STATIC_URL") is None:
+    load_dotenv()
+
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
 GROUPS_FILE = Path("groups.json")
 POLL_QUESTION = "Кто будет сегодня заниматься?"
 POLL_OPTIONS = ["Я буду", "Возможно позже", "Не сегодня"]
