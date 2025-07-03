@@ -1,0 +1,11 @@
+# Telegram bot framework with built-in AIORateLimiter support
+python-telegram-bot[rate-limiter]~=21.11
+
+# Load environment variables from a .env file
+python-dotenv~=1.0
+
+# Allows running asyncio code in already running event loops
+nest_asyncio~=1.6
+
+# Optional: Required for timezone support in some environments (like Alpine)
+tzdata~=2024.1
