@@ -6,8 +6,9 @@ from pathlib import Path
 from typing import List
 from zoneinfo import ZoneInfo
 from datetime import time
-
 from telegram import Update
+from telegram.ext import ApplicationHandlerStop
+from telegram.error import Forbidden
 from telegram.error import ChatMigrated
 from telegram.ext import (
     ApplicationBuilder,
@@ -39,6 +40,15 @@ logging.basicConfig(
     level=logging.INFO,
 )
 log = logging.getLogger(__name__)
+
+
+###############################################################################
+# Error Handler
+###############################################################################
+async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
+    log.error("Exception while handling update:", exc_info=context.error)
+    if isinstance(context.error, ApplicationHandlerStop):
+        return
 
 
 ###############################################################################
@@ -121,6 +131,9 @@ async def daily_poll_job(context: ContextTypes.DEFAULT_TYPE):
             log.warning("Group %s migrated to %s", gid, e.new_chat_id)
             remove_group(gid)
             add_group(e.new_chat_id)
+        except Forbidden:
+            log.warning("Bot was removed from group %s. Removing from list.", gid)
+            remove_group(gid)
         except Exception as exc:
             log.error("Error sending poll to %s: %s", gid, exc)
 
@@ -139,12 +152,15 @@ async def main() -> None:
         .build()
     )
 
-    # 1) Handle bot being added or removed from a group
+    # Handle bot being added or removed from a group
     app.add_handler(
         ChatMemberHandler(handle_my_chat_member, ChatMemberHandler.MY_CHAT_MEMBER)
     )
 
-    # 2) Schedule poll job (daily)
+    # Global Error Handler
+    app.add_error_handler(error_handler)
+
+    # Schedule poll job (daily)
     poll_time = time(hour=21, minute=0, tzinfo=TIMEZONE)
     app.job_queue.run_daily(daily_poll_job, poll_time)
 
